@@ -6,4 +6,3 @@ def test_open_main_page():
     print(f'{driver.current_url} is open')
     driver.quit()
 
-#тест
