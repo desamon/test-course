@@ -1,7 +1,7 @@
 from selenium.webdriver import Chrome
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
-from functions import login, success_alert_is_present, element_is_present
+from functions import login, success_alert_is_present, element_is_present, wait_until_visible
 from selenium.webdriver.support import expected_conditions as ec
 
 
@@ -28,10 +28,10 @@ def test_slow_load():
         wait.until(ec.element_to_be_clickable((By.CLASS_NAME, 'button'))).click()
 
         assert element_is_present(browser, By.CSS_SELECTOR, '.is-success'), "Необходимый текст отсутствует"
-        text = browser.find_element(By.CSS_SELECTOR, '.is-success').text
+        text = wait_until_visible(browser, (By.CSS_SELECTOR, '.is-success')).text
         assert text == "Успех.", f"Неверный текст: {text}"
         browser.refresh()
-        assert not element_is_present(browser, By.CSS_SELECTOR, '.is-success'), "Необходимый текст отсутствует"
+        assert not element_is_present(browser, By.CSS_SELECTOR, '.is-success'), "Текст присутствует"
 
 
 def test_navigation():
@@ -39,7 +39,7 @@ def test_navigation():
         browser.get("https://qastand.valhalla.pw/profile")
         browser.maximize_window()
         login(browser)
-        browser.find_element(By.XPATH, './/ul/li[2]/*[@class="navbar-item"]').click()
+        wait_until_visible(browser, (By.XPATH, './/ul/li[2]/*[@class="navbar-item"]').click()
         wait = WebDriverWait(browser, 5)
         wait.until(ec.url_to_be('https://qastand.valhalla.pw/my_pet'))
         browser.refresh()
