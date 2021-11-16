@@ -1,20 +1,19 @@
 from selenium.webdriver import Chrome
-from functions import login, element_is_present
+from functions import login, element_is_present, wait_until_present
 from selenium.webdriver.common.by import By
 
 
 def test_inputs_page():
-   with Chrome() as browser:
-       browser.get("https://qastand.valhalla.pw/inputs")
-       browser.maximize_window()
-       login(browser)
-       placeholder = browser.find_element_by_css_selector('[name="test"]')
-       placeholder.send_keys("Test")
-       browser.find_element_by_css_selector('.button:nth-child(2)').click()
-       text = browser.find_element(By.CSS_SELECTOR, '.is-success').text
+    with Chrome() as browser:
+        browser.get("https://qastand.valhalla.pw/inputs")
+        browser.maximize_window()
+        login(browser)
+        wait_until_present(browser, By.CSS_SELECTOR, '[name="test"]').send_keys("Test")
+        wait_until_present(browser, By.CSS_SELECTOR, '.button:nth-child(2)').click()
+        text = wait_until_present(browser, By.CSS_SELECTOR, '.is-success').text
 
-       assert element_is_present(browser, By.CSS_SELECTOR, '.is-success'), "Необходимый текст отсутствует"
-       assert text == "Верно", f"Неверный текст: {text}"
+        assert element_is_present(browser, By.CSS_SELECTOR, '.is-success'), "Необходимый текст отсутствует"
+        assert text == "Верно", f"Неверный текст: {text}"
 
 
 def test_pet_page():
@@ -22,12 +21,12 @@ def test_pet_page():
         browser.get("https://qastand.valhalla.pw/my_pet")
         browser.maximize_window()
         login(browser)
-        placeholder = browser.name("pet").send_keys("Кот")
-        placeholder = browser.name("name").send_keys("Семён")
-        placeholder = browser.name("age").send_keys("18")
-        placeholder = browser.name("sex").send_keys("Мужской")
-        browser.find_element(By.CSS_SELECTOR, '.button').click()
-        text = browser.find_element(By.XPATH, '//*[contains(text(), "Успех.")]').text
+        wait_until_present(browser, By.NAME, "pet").send_keys("Кот")
+        wait_until_present(browser, By.NAME, "name").send_keys("Семён")
+        wait_until_present(browser, By.NAME, "age").send_keys("18")
+        wait_until_present(browser, By.NAME, "sex").send_keys("Мужской")
+        wait_until_present(browser, By.CSS_SELECTOR, '.button').click()
+        text = wait_until_present(browser, By.XPATH, '//*[contains(text(), "Успех.")]').text
         assert element_is_present(browser, By.CSS_SELECTOR, '.is-success'), "Необходимый текст отсутствует"
         assert text == "Успех.", f"Неверный текст: {text}"
 
@@ -37,19 +36,19 @@ def test_pet_page_negativ():
         browser.get("https://qastand.valhalla.pw/my_pet")
         browser.maximize_window()
         login(browser)
-        placeholder = browser.name("pet").send_keys("Кот")
-        browser.find_element(By.CSS_SELECTOR, '.button').click()
-        text = browser.find_element(By.XPATH, '//*[contains(text(), "Заполнены не все поля.")]').text
+        wait_until_present(browser, By.NAME, "pet").send_keys("Кот")
+        wait_until_present(browser, By.CSS_SELECTOR, '.button').click()
+        text = wait_until_present(browser, By.XPATH, '//*[contains(text(), "Заполнены не все поля.")]').text
         assert element_is_present(browser, By.CLASS_NAME, "notification"), "Необходимый текст отсутствует"
         assert text == "Заполнены не все поля.", f"Неверный текст: {text}"
-        assert not element_is_present(browser,  By.CSS_SELECTOR, '.is-success'), "Сообщение об успехе отображается"
+        assert not element_is_present(browser, By.CSS_SELECTOR, '.is-success'), "Сообщение об успехе отображается"
 
 
 def test_main_page():
     with Chrome() as browser:
         browser.get("https://qastand.valhalla.pw/")
         browser.maximize_window()
-        browser.find_element(By.CSS_SELECTOR, '#login').click()
+        wait_until_present(browser, By.CSS_SELECTOR, '#login').click()
         login(browser)
         page_name = ['Поля ввода и кнопки', 'Мой питомец', 'О себе', 'Загрузка файла', 'Ожидание', 'Медленная загрузка',
                      'Модальные окна', 'Новая вкладка', 'iframe', 'Drag-and-drop']
@@ -58,8 +57,3 @@ def test_main_page():
         for i in elements:
             page_name_1.append(i.text)
         assert page_name == page_name_1, "Списки неодинаковые"
-
-
-
-
-

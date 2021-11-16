@@ -1,20 +1,17 @@
+from webbrowser import Chrome
+
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+
 from typing import Tuple
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import Chrome
-from selenium.webdriver.remote.webdriver import WebElement
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 def login(browser):
     browser.get("https://qastand.valhalla.pw/login")
     browser.add_cookie({'name': 'session', 'value': '.eJwlzj0OwjAMQOG7ZGZwEjuOe5kq_hOsLZ0Qd6cSb3nr9yl7HnE-y_Y-rniU_eVlK4sgmouwWwoOncA6vCOzLVkgno0H1RaGnVARddSRlPe5SqU7bLDEFboQy1ScvoQMpjXvzINz5mwM1EPNuDdcXKFatVSKckOuM46_hsr3B2nILjw.YUXS4w.GVnihkZ93AsGahmx3pOHA_wulCY'})
     browser.refresh()
-   #wait_until_clickable(browser, (By.NAME, "email")).send_keys("qa_test@test.ru")
-    #wait_until_clickable(browser, (By.NAME, "password")).send_keys("!QAZ2wsx")
-    #wait_until_clickable(browser, (By.CLASS_NAME, "button")).click()
-
 
 
 def wait_until_clickable(driver: Chrome, locator: Tuple, timeout: int = 5) -> WebElement:
